@@ -19,8 +19,8 @@ jobs:
       - name: install git
         run: |
           sudo apt-get update && sudo apt-get install -y git subversion &&
-          svn co http://svn.code.sf.net/p/openfoam-extend/svn/trunk/Breeder_1.6/other/waves2Foam &&
-          cd waves2Foam && ./Allwmake
+          sudo svn co http://svn.code.sf.net/p/openfoam-extend/svn/trunk/Breeder_1.6/other/waves2Foam /applications/utilities/waves2Foam &&
+          cd /applications/utilities/waves2Foam && ./Allwmake
 #/home/users/bonamy2c/OpenFOAM/bonamy2c-v2406/applications/utilities/waves2Foam
       - name: Check out repository code
         uses: actions/checkout@v3
