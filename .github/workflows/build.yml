@@ -29,7 +29,8 @@ jobs:
       - name: Build sedinterfoam
         run: |
           shopt -s expand_aliases && source /openfoam/bash.rc && 
-          export FOAM_USER_LIBBIN=$FOAM_SITE_LIBBIN && ./Allwmake -prefix=group
+          export FOAM_USER_LIBBIN=$FOAM_SITE_LIBBIN && export WAVES_SRC=/applications/utilities/waves2Foam/src/ &&
+          ./Allwmake -prefix=group
       - uses: actions/upload-artifact@v4.4.3
         with:
           name: sedinterfoam-binary

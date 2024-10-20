@@ -1,0 +1,3 @@
+[submodule "foamStyleCheck"]
+	path = foamStyleCheck
+	url = git@github.com:petebachant/foamStyleCheck.git
