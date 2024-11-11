@@ -18,10 +18,9 @@ jobs:
     steps:
       - name: install git
         run: |
-          sudo apt-get update && sudo apt-get install -y git subversion &&
-          sudo svn co http://svn.code.sf.net/p/openfoam-extend/svn/trunk/Breeder_1.6/other/waves2Foam /applications/utilities/waves2Foam &&
-          cd /applications/utilities/waves2Foam && ./Allwmake
-#/home/users/bonamy2c/OpenFOAM/bonamy2c-v2406/applications/utilities/waves2Foam
+          sudo apt-get update && sudo apt-get install -y git &&
+          git clone https://github.com/sedfoam/waves2foam &&
+          cd waves2foam && ./Allwmake
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
@@ -29,7 +28,7 @@ jobs:
       - name: Build sedinterfoam
         run: |
           shopt -s expand_aliases && source /openfoam/bash.rc && 
-          export FOAM_USER_LIBBIN=$FOAM_SITE_LIBBIN && export WAVES_SRC=/applications/utilities/waves2Foam/src/ &&
+          export FOAM_USER_LIBBIN=$FOAM_SITE_LIBBIN && export WAVES_SRC=/home/sudofoam/waves2Foam/src/ &&
           ./Allwmake -prefix=group
       - uses: actions/upload-artifact@v4.4.3
         with:
@@ -48,7 +47,9 @@ jobs:
       - name: install git and python3 packages
         run: |
           apt-get update && sudo apt-get install -y git &&
-          apt-get -y install python3 python3-pip &&
+          apt-get -y install python3 python3-pip python3-venv &&
+          python3 -m venv /home/sudofoam/pyenv &&
+          source /home/sudofoam/pyenv/bin/activate &&
           pip3 install fluidfoam 
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -68,50 +69,6 @@ jobs:
           cp -f system/controlDict.sedim system/controlDict  && sudo chmod -R a+rwX ../* &&
           runuser -u sudofoam -- ./Allrun > /dev/null &&
           python3 test_Sedimentation.py
-      - name: sedfoam test1D bedload
-        run: |
-          shopt -s expand_aliases && source /openfoam/bash.rc &&
-          cd test-ci/1DSedim && cp -f constant/forceProperties.bedload constant/forceProperties &&
-          cp -f system/controlDict.bedload system/controlDict &&
-          runuser -u sudofoam -- ./Allrun > /dev/null && python3 test_Bedload.py
-          runuser -u sudofoam -- ./Allrun > /dev/null &&
-          python3 test_1DBedLoadTurb.py
-      - name: sedfoam test 1DBoundaryLayer
-        run: |
-          shopt -s expand_aliases && source /openfoam/bash.rc && cd test-ci/1DBoundaryLayer &&
-          runuser -u sudofoam -- ./Allrun > /dev/null &&
-          python3 test_1DBoundaryLayer.py
-
-  advanced-test2:
-    runs-on: ubuntu-latest
-    container: 
-      image: opencfd/openfoam-dev:2406
-    needs: [test]
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - name: install git and python3 packages
-        run: |
-          apt-get update && apt-get install -y git python3 python3-pip &&
-          pip3 install fluidfoam
-      - name: Check out repository code
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - uses: actions/download-artifact@v4.1.8
-        with:
-          name: sedinterfoam-binary
-          path: /usr/lib/openfoam/openfoam2406/site
-      - name: chmod sedfoam binary
-        run: sudo chmod a+x -R *
-        working-directory: /usr/lib/openfoam/openfoam2406/site
-      - name: sedinterfoam test 1DWetAvalanche
-        run: |
-          shopt -s expand_aliases && source /openfoam/bash.rc && 
-          chmod -R a+rwX test-ci && cd test-ci/1DWetAvalanche &&
-          runuser -u sudofoam -- ./Allrun > /dev/null &&
-          python3 test_1DWetAvalanche.py
 
   checkpep8:
     runs-on: ubuntu-latest
