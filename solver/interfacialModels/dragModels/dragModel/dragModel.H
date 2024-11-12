@@ -118,7 +118,8 @@ public:
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  //
     // for numerical reasons alphas and alphaw has been
     // extracted from the dragFunction K,
-    // so you MUST divide K by alphas.alphaflu when implemnting the drag function
+    // so you MUST divide K by alphas.alphaflu when implemnting the drag
+    // function
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  //
     virtual tmp<volScalarField> K(const volScalarField& Ur) const = 0;
 };

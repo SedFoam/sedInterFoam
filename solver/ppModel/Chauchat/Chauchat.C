@@ -71,7 +71,8 @@ Foam::tmp<Foam::volScalarField> Foam::Chauchat::pff
 {
     scalar N = 2/(3-eta0.value());
 
-    volScalarField arg1(1- max(alphas_ - alphasMinFriction, scalar(0))/alphasMax);
+    volScalarField arg1
+    (1- max(alphas_ - alphasMinFriction, scalar(0))/alphasMax);
 
     return pos(alphas_-alphasMinFriction)*Fr*(pow(arg1, -N) - 1 );
 }

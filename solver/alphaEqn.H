@@ -1,3 +1,24 @@
+/*---------------------------------------------------------------------------*\
+Copyright (C) 2024 Antoine Mathieu, Cyrille Bonamy, Julien Chauchat,
+                   Tian-Jian Hsu and contributors
+
+License
+    This file is part of SedInterFOAM.
+
+    SedInterFOAM is free software: you can redistribute it and/or modify it
+    under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SedFOAM is distributed in the hope that it will be useful, but WITHOUT
+    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+    for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with SedInterFOAM.  If not, see <http://www.gnu.org/licenses/>.
+
+\*---------------------------------------------------------------------------*/
 {
     word scheme("div(phi,alphas)");
     word schemer("div(phir,alphas)");
@@ -31,13 +52,12 @@
         }
         alphas.min(alphasMax);
         alphas.max(0);
-
-	alphaf = min(max(1.0-alphas, scalar(0)), scalar(1.0));
+        alphaf = min(max(1.0-alphas, scalar(0)), scalar(1.0));
         alphaw = alphaf*gamma;
         voidFrac = 1.0 - gamma;
-	alphag = min(max(1.0 - alphaw - alphas, scalar(0)), scalar(1.0));
+        alphag = min(max(1.0 - alphaw - alphas, scalar(0)), scalar(1.0));
 
-        //alphaw += alphag*(pos(alphas-alphag)*pos(alphaw-0.1)*pos(0.99-alphaw));
+        //alphaw += alphag*pos(alphas-alphag)*pos(alphaw-0.1)*pos(0.99-alphaw);
         //alphag *= (1-pos(alphas-alphag)*pos(alphaw-0.1)*pos(0.99-alphaw));
 
         if (debugInfo)

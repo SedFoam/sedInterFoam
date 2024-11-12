@@ -387,7 +387,10 @@ void Foam::kineticTheoryModel::solve
     //////////////////////////////////////////////
     // Temperature conductivity (Table 3.3, p. 49)
     //////////////////////////////////////////////
-    kappa_ = conductivityModel_->kappa(alphas_, ThetaClip, gs0_, rhos_, ds_, e_);
+    kappa_ = conductivityModel_->kappa
+    (
+        alphas_, ThetaClip, gs0_, rhos_, ds_, e_
+    );
 
     ///////////////////////////////////////
     // Granular viscosity (Table 3.2, p.47)

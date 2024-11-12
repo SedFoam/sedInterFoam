@@ -28,19 +28,20 @@ int nGammaCorr(pimple.dict().get<int>("nGammaCorr"));
 int nAlphasCorr(pimple.dict().get<int>("nAlphasCorr"));
 int nAlphaSubCycles(pimple.dict().get<int>("nAlphaSubCycles"));
 bool MULESCorr(pimple.dict().lookupOrDefault<Switch>("MULESCorr", false));
-bool gammaApplyPrevCorr(pimple.dict().lookupOrDefault<Switch>("gammaApplyPrevCorr", false));
+bool gammaApplyPrevCorr
+     (pimple.dict().lookupOrDefault<Switch>("gammaApplyPrevCorr", false));
 // compression coefficients
 scalar cAlpha
 (
-	pimple.dict().lookupOrDefault<scalar>("cAlpha", 0)
+    pimple.dict().lookupOrDefault<scalar>("cAlpha", 0)
 );
 scalar icAlpha
 (
-	pimple.dict().lookupOrDefault<scalar>("icAlpha", 0)
+    pimple.dict().lookupOrDefault<scalar>("icAlpha", 0)
 );
-	 
+
 // Shear compression coefficient
 scalar scAlpha
 (
-	pimple.dict().lookupOrDefault<scalar>("scAlpha", 0)
+    pimple.dict().lookupOrDefault<scalar>("scAlpha", 0)
 );

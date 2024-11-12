@@ -30,13 +30,12 @@ jobs:
       - name: Build sedinterfoam
         run: |
           shopt -s expand_aliases && source /openfoam/bash.rc && cd /tmp/waves2foam && 
-          source bin/bashrc && cd - && export FOAM_USER_LIBBIN=$FOAM_SITE_LIBBIN &&
-          ./Allwmake -prefix=group
+          source bin/bashrc && cd - &&
+          ./Allwmake
       - uses: actions/upload-artifact@v4.4.3
         with:
           name: sedinterfoam-binary
           path: |
-            /usr/lib/openfoam/openfoam2406/site
             /github/home/OpenFOAM
 
   test:
@@ -63,7 +62,6 @@ jobs:
         with:
           name: sedfoam-binary
           path: |
-            /usr/lib/openfoam/openfoam2406/site
             /github/home/OpenFOAM
       - name: chmod sedfoam binary
         run: chmod a+x -R *

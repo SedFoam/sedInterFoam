@@ -112,11 +112,11 @@ fvVectorMatrix UfEqn
 (
     (scalar(1.0) + Cvm*rhof*alphas/rhof)*
     (
-        fvm::ddt(rhof,Uf)
+        fvm::ddt(rhof, Uf)
       + fvm::div(rhoPhi, Uf)
       - fvm::Sp(rhof*fvc::div(phif), Uf)
     )
-  - fvm::laplacian(rhof*nuEfff, Uf) 
+  - fvm::laplacian(rhof*nuEfff, Uf)
   + fvm::div(phiRf, Uf, "div(phiRf,Uf)")
   - fvm::Sp(fvc::div(phiRf), Uf)
   + fvc::div(rhof*Rcf)
@@ -133,4 +133,3 @@ UfEqn += fvm::Sp(alphas*K, Uf);
 fvOptions.constrain(UfEqn);
 Uf.correctBoundaryConditions();
 // fvOptions.correct(Uf);
-
