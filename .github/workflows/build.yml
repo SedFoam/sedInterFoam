@@ -54,10 +54,6 @@ jobs:
           python3 -m venv /home/sudofoam/pyenv &&
           source /home/sudofoam/pyenv/bin/activate &&
           pip3 install fluidfoam 
-      - name: Check out repository code
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - uses: actions/download-artifact@v4.1.8
         with:
           name: sedinterfoam-binary
@@ -66,12 +62,15 @@ jobs:
       - name: chmod sedfoam binary
         run: chmod a+x -R *
         working-directory: /github/home/OpenFOAM
+      - name: Check out repository code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
       - name: sedfoam test damBreak
         run: |
           shopt -s expand_aliases && source /openfoam/bash.rc && 
           cd tutorial/laminar/damBreak && cp -f system/controlDict_CI system/controlDict &&
-          sudo chmod -R a+rwX ../* &&
-          runuser -u sudofoam -- ./Allrun
+          sudo chmod -R a+rwX ../* && ./Allrun
           # python3 test_Sedimentation.py
 
   checkpep8:
