@@ -28,7 +28,7 @@ jobs:
           submodules: recursive
       - name: Build sedinterfoam
         run: |
-          shopt -s expand_aliases && source /openfoam/bash.rc && 
+          shopt -s expand_aliases && source /openfoam/bash.rc && source /github/home/waves2foam/bin/bashrc && 
           export FOAM_USER_LIBBIN=$FOAM_SITE_LIBBIN && export WAVES_SRC=/home/sudofoam/waves2Foam/src/ &&
           ./Allwmake -prefix=group
       - uses: actions/upload-artifact@v4.4.3
