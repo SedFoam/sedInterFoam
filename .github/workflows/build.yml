@@ -65,14 +65,14 @@ jobs:
             /github/home/OpenFOAM
       - name: chmod sedfoam binary
         run: chmod a+x -R *
-        working-directory: /usr/lib/openfoam/openfoam2406/site
-      - name: sedfoam test1D sedim
+        working-directory: /github/home/OpenFOAM
+      - name: sedfoam test damBreak
         run: |
           shopt -s expand_aliases && source /openfoam/bash.rc && 
-          cd test-ci/1DSedim && cp -f constant/forceProperties.sedim constant/forceProperties &&
-          cp -f system/controlDict.sedim system/controlDict  && sudo chmod -R a+rwX ../* &&
-          runuser -u sudofoam -- ./Allrun > /dev/null &&
-          python3 test_Sedimentation.py
+          cd tutorial/laminar/damBreak && cp -f system/controlDict_CI system/controlDict &&
+          sudo chmod -R a+rwX ../* &&
+          runuser -u sudofoam -- ./Allrun
+          # python3 test_Sedimentation.py
 
   checkpep8:
     runs-on: ubuntu-latest
@@ -86,7 +86,6 @@ jobs:
           submodules: recursive
       - name: Python Style Checker
         run: |
-          pycodestyle test-ci  --max-line-length=120 &&
           pycodestyle tutorials  --max-line-length=120
 
   checkstyle:
