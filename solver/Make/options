@@ -49,7 +49,7 @@ EXE_LIBS = \
     -lturbulenceModels \
     -linterfaceProperties \
     -lincompressibleTurbulenceModels \
-    -ltwoPhaseTurbulenceModels \
+    -ltwoPhaseInterTurbulenceModels \
     -L$(WAVES_LIBBIN) \
     -lwaves2Foam \
     -lwaves2FoamGABC \

@@ -96,7 +96,7 @@ License
               + nuEffs*tr(gradUsT) + spherSigmaSGSs))
             )
            *rUsAf*mesh.magSf()
-          - (scalar(2.0/3.0)*oneOverAlphas*fvc::snGrad(nuFrsExp*tr(gradUsT)))
+          - scalar(2.0/3.0)*oneOverAlphas*fvc::snGrad(nuFrsExp*tr(gradUsT))
            *rUsAf*mesh.magSf()
           // stress part 3
           + rUsAf*(oneOverAlphas
@@ -113,7 +113,11 @@ License
                (1.0-rhoff/rhos)*(gravity & mesh.Sf())
             )
           // mean pressure gradient
-          + rUsAf*((alphaff*gradPOSC/(alphaff*(tilt*rhoff+(1.0-tilt)*rhos))) & mesh.Sf())
+          + rUsAf*
+            (
+                (alphaff*gradPOSC/(alphaff*(tilt*rhoff+(1.0-tilt)*rhos)))
+                & mesh.Sf()
+            )
         );
     if (not SUSaniso)
     {
@@ -141,7 +145,8 @@ License
           // driving force
           + rUfAf*((gradPOSC*alphaff/(rhoff*alphaff)) & mesh.Sf())
           // Convective acceleration for 1D non-uniform simulation
-          - rUfAf*fvc::interpolate(neg(alphas-0.3))*((alphaff*gradConvAcc/(alphaff*rhoff))
+          - rUfAf*fvc::interpolate(neg(alphas-0.3))
+          *((alphaff*gradConvAcc/(alphaff*rhoff))
             & mesh.Sf())
         );
     if (not SUSaniso)

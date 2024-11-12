@@ -1,4 +1,4 @@
-	/*---------------------------------------------------------------------------*\
+/*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     |
@@ -797,8 +797,10 @@ dimensionedScalar sigmags
 // MULES Correction
 tmp<surfaceScalarField> tgammaPhiCorr0;
 
-//The following two flags are used to solve the stability problem which occurs when air is entrained
-//on water-sediment interface. It may cause mass conservation error which can be large in some cases 
+//The following two flags are used to solve the stability problem which occurs
+//when air is entrained
+//on water-sediment interface. It may cause mass conservation error which can
+//be large in some cases
 
 Switch waves(transportProperties.lookupOrDefault("waves2Foam", false));
 
@@ -806,7 +808,7 @@ Switch waves(transportProperties.lookupOrDefault("waves2Foam", false));
 Switch removeAir(transportProperties.lookupOrDefault("removeAir", false));
 
 //Flag to add water instead of the removed air
-Switch addWater(transportProperties.lookupOrDefault("addWater", false)); 
+Switch addWater(transportProperties.lookupOrDefault("addWater", false));
 
 volScalarField sigma
 (

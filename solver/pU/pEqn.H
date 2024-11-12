@@ -227,8 +227,8 @@ License
 #else
             p_rghEqn.solve(mesh.solver(p_rgh.select(pimple.finalInnerIter())));
 #endif
-        if (pimple.finalNonOrthogonalIter())
-        {
+            if (pimple.finalNonOrthogonalIter())
+            {
             // Compute pressure gradient at cell faces
                 surfaceScalarField SfGradp(p_rghEqn.flux()/Dp);
                 // Compute corrected velocity fluxes at cell faces
@@ -277,8 +277,8 @@ License
                 Uf = U - alphas*Ur;
                 Uf.correctBoundaryConditions();
                 fvOptions.correct(Uf);
+            }
         }
-    }
 
     #include "continuityErrs.H"
 

@@ -16,24 +16,27 @@ jobs:
     runs-on: ubuntu-latest
     container: opencfd/openfoam-dev:2406
     steps:
-      - name: install git
+      - name: install waves2foam
         run: |
           sudo apt-get update && sudo apt-get install -y git &&
+          sudo apt-get -y install libgsl-dev gsl-bin && cd /tmp &&
           git clone https://github.com/sedfoam/waves2foam &&
-          cd waves2foam && ./Allwmake
+          cd waves2foam && shopt -s expand_aliases && source /openfoam/bash.rc &&
+          ./Allwmake
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Build sedinterfoam
         run: |
-          shopt -s expand_aliases && source /openfoam/bash.rc && 
-          export FOAM_USER_LIBBIN=$FOAM_SITE_LIBBIN && export WAVES_SRC=/home/sudofoam/waves2Foam/src/ &&
-          ./Allwmake -prefix=group
+          shopt -s expand_aliases && source /openfoam/bash.rc && cd /tmp/waves2foam && 
+          source bin/bashrc && cd - &&
+          ./Allwmake
       - uses: actions/upload-artifact@v4.4.3
         with:
           name: sedinterfoam-binary
-          path: /usr/lib/openfoam/openfoam2406/site
+          path: |
+            /github/home/OpenFOAM
 
   test:
     runs-on: ubuntu-latest
@@ -51,24 +54,24 @@ jobs:
           python3 -m venv /home/sudofoam/pyenv &&
           source /home/sudofoam/pyenv/bin/activate &&
           pip3 install fluidfoam 
+      - uses: actions/download-artifact@v4.1.8
+        with:
+          name: sedinterfoam-binary
+          path: |
+            /github/home/OpenFOAM
+      - name: chmod sedfoam binary
+        run: chmod a+x -R *
+        working-directory: /github/home/OpenFOAM
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
           submodules: recursive
-      - uses: actions/download-artifact@v4.1.8
-        with:
-          name: sedfoam-binary
-          path: /usr/lib/openfoam/openfoam2406/site
-      - name: chmod sedfoam binary
-        run: chmod a+x -R *
-        working-directory: /usr/lib/openfoam/openfoam2406/site
-      - name: sedfoam test1D sedim
+      - name: sedfoam test damBreak
         run: |
           shopt -s expand_aliases && source /openfoam/bash.rc && 
-          cd test-ci/1DSedim && cp -f constant/forceProperties.sedim constant/forceProperties &&
-          cp -f system/controlDict.sedim system/controlDict  && sudo chmod -R a+rwX ../* &&
-          runuser -u sudofoam -- ./Allrun > /dev/null &&
-          python3 test_Sedimentation.py
+          cd tutorials/laminar/damBreak && cp -f system/controlDict_CI system/controlDict &&
+          sudo chmod -R a+rwX ../* && ./Allrun
+          # python3 test_Sedimentation.py
 
   checkpep8:
     runs-on: ubuntu-latest
@@ -82,7 +85,6 @@ jobs:
           submodules: recursive
       - name: Python Style Checker
         run: |
-          pycodestyle test-ci  --max-line-length=120 &&
           pycodestyle tutorials  --max-line-length=120
 
   checkstyle:

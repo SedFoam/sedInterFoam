@@ -96,14 +96,7 @@ protected:
     volScalarField epsilon_;
 
     // Protected Member Functions
-
-        virtual void correctNut();
-
-        //- No copy construct and assignment
-        twophaseMixingLength(const twophaseMixingLength&) = delete;
-
-        //- No copy assignment
-        void operator=(const twophaseMixingLength&) = delete;
+    virtual void correctNut();
 
 
 public:
