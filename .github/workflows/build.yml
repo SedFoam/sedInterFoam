@@ -16,12 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     container: opencfd/openfoam-dev:2406
     steps:
-      - name: install git
+      - name: install waves2foam
         run: |
           sudo apt-get update && sudo apt-get install -y git &&
           sudo apt-get -y install libgsl-dev gsl-bin &&
           git clone https://github.com/CyrilleBonamy/waves2foam &&
-          cd waves2foam && ./Allwmake
+          cd waves2foam && shopt -s expand_aliases && source /openfoam/bash.rc &&
+          ./Allwmake
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
