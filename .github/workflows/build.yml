@@ -60,7 +60,7 @@ jobs:
           submodules: recursive
       - uses: actions/download-artifact@v4.1.8
         with:
-          name: sedfoam-binary
+          name: sedinterfoam-binary
           path: |
             /github/home/OpenFOAM
       - name: chmod sedfoam binary
