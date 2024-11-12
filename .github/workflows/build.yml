@@ -69,7 +69,7 @@ jobs:
       - name: sedfoam test damBreak
         run: |
           shopt -s expand_aliases && source /openfoam/bash.rc && 
-          cd tutorial/laminar/damBreak && cp -f system/controlDict_CI system/controlDict &&
+          cd tutorials/laminar/damBreak && cp -f system/controlDict_CI system/controlDict &&
           sudo chmod -R a+rwX ../* && ./Allrun
           # python3 test_Sedimentation.py
 
