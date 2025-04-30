@@ -1,10 +1,10 @@
 sedInterFoam
 =======
 
-[![Release](https://img.shields.io/badge/release-2406-blue.svg)](http://github.com/SedFoam/sedInterFoam)
+[![Release](https://img.shields.io/badge/release-2412-blue.svg)](http://github.com/SedFoam/sedInterFoam)
 [![OpenFOAM v24xx](https://img.shields.io/badge/OpenFOAM-v24xx-brightgreen.svg)](https://openfoam.com/)
 
-This repository provides the sedInterFoam solver (for ESI 2406 openfoam version)
+This repository provides the sedInterFoam solver (for ESI 2412 openfoam version)
 
 Status
 ------
