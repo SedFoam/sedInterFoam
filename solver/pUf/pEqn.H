@@ -115,13 +115,14 @@ License
           // mean pressure gradient
           + rUsAf*((alphaff*gradPOSC/(alphaff*(tilt*rhoff+(1.0-tilt)*rhos))) & mesh.Sf())
         );
-    if (not SUSaniso)
-    {
-        // turbulent suspension term
-        phiDrags += -(fvc::interpolate(SUS*(K/rhos)*turbulencef->nut()
+
+        if (not SUSaniso)
+        {
+            // turbulent suspension term
+            phiDrags += -(fvc::interpolate(SUS*(K/rhos)*turbulencef->nut()
                    *(alphaf/(alphas + alphasSmall)))
                    *fvc::snGrad(alphas))*rUsAf*mesh.magSf();
-    }
+        }
 
         // Momentum flux at the cell faces for phase f
         surfaceScalarField phiDragf
@@ -139,21 +140,22 @@ License
                 fvc::div(alphaf*nuEfff*gradUfT, schemeA)) & mesh.Sf()
             )
           // driving force
-          + rUfAf*((gradPOSC*alphaff/(rhoff*alphaff)) & mesh.Sf())
+          + rUfAf*((gradPOSC/rhoff) & mesh.Sf())
           // Convective acceleration for 1D non-uniform simulation
-          - rUfAf*fvc::interpolate(neg(alphas-0.3))*((alphaff*gradConvAcc/(alphaff*rhoff))
+          - rUfAf*fvc::interpolate(neg(alphas-0.3))*((gradConvAcc/rhoff)
             & mesh.Sf())
         );
-    if (not SUSaniso)
-    {
-        // turbulent suspension term
-        phiDragf += fvc::interpolate(SUS*(K/rhof)
+
+        if (not SUSaniso)
+        {
+            // turbulent suspension term
+            phiDragf += fvc::interpolate(SUS*(K/rhof)
                         *turbulencef->nut())*fvc::snGrad(alphas)
                         *rUfAf*mesh.magSf();
-    }
+        }
+
         //    fvOptions.makeRelative(phiHabyA);
         //    fvOptions.makeRelative(phiHbbyA);
-
 
         // Fix for gravity on outlet boundary.
         forAll(p_rbgh.boundaryField(), patchi)
@@ -195,6 +197,7 @@ License
                  phiDragf.boundaryFieldRef()[patchi] = 0.0;
              }
         }
+
         // Compute corrected velocity fluxes at cell faces
         //      (account for time evolution)
         surfaceScalarField phiUs
@@ -206,6 +209,7 @@ License
         (
             (fvc::interpolate(HfbyA) & mesh.Sf()) + rUfAf*fvc::ddtCorr(Uf, phif)
         );
+
         // Compute predicted velocity fluxes at cell faces
         //      (account for momentum fluxes computed at cell faces)
         surfaceScalarField phisHbyA(phiUs + phiDrags);
@@ -214,6 +218,7 @@ License
         // Face-drag coefficients
         surfaceScalarField rAUKds(fvc::interpolate(alphaf/rhos*K*rUsA));
         surfaceScalarField rAUKdf(fvc::interpolate(alphas/rhof*K*rUfA));
+
         // Compute predicted velocity fluxes at cell faces including
         //       including semi-implicit drag contribution
         surfaceScalarField phiHbyA
@@ -239,7 +244,7 @@ License
                 phiHbyA.boundaryField()
               - alphasf.boundaryField()
                *(mesh.Sf().boundaryField() & Us.boundaryField())
-              + alphaff.boundaryField()
+              - alphaff.boundaryField()
                *(mesh.Sf().boundaryField() & Uf.boundaryField())
              )
             /(mesh.magSf().boundaryField()*Dp.boundaryField())
@@ -252,6 +257,7 @@ License
             (
                 fvm::laplacian(Dp, p_rbgh) == fvc::div(phiHbyA)
             );
+
             // Set pressure reference
             pEqn.setReference(pRefCell, getRefCellValue(p_rbgh, pRefCell));
 
@@ -265,12 +271,15 @@ License
             {
                 // Compute pressure gradient at cell faces
                 surfaceScalarField SfGradp(pEqn.flux()/Dp);
+
                 // Compute corrected velocity fluxes at cell faces
                 //       due to pressure gradient
                 surfaceScalarField phiss(phisHbyA - rUsAf*SfGradp/rhos);
                 surfaceScalarField phifs(phifHbyA - rUfAf*SfGradp/rhoff);
+
                 // Compute mixture velocity flux at cell faces
                 phi = phiHbyA - pEqn.flux();
+
                 // Compute corrected relative velocity fluxes due to drag force
                 //       at cell faces
                 surfaceScalarField phir
@@ -278,6 +287,7 @@ License
                     ((phiss + rAUKds*phifs) - (phifs + rAUKdf*phiss))
                    /(1 - rAUKds*rAUKdf)
                 );
+
                 // Compute corrected phase velocity fluxes at cell faces
                 //       using updated semi-implicit drag
                 phis = phi + alphaff*(phir);
@@ -285,7 +295,9 @@ License
 
                 // Compute contibuity error
                 #include "continuityErrs.H"
+
                 p_rbgh.relax();
+
                 // Is it useful?
                 SfGradp = pEqn.flux()/Dp;
 
@@ -298,13 +310,16 @@ License
                 (
                     HsbyA + rUsA*fvc::reconstruct(phiDrags/rUsAf-SfGradp/rhos)
                 );
+
                 // Compute corrected relative velocity due to drag force
                 //       at cell centers
                 volScalarField Ds(alphaf/rhos*K*rUsA);
                 volScalarField Df(alphas/rhof*K*rUfA);
                 volVectorField Ur(((1 - Df)*Uss - (1 - Ds)*Ufs)/(1 - Ds*Df));
+
                 // Compute mixture velocity flux at cell centers
                 U = alphas*(Uss + Ds*Uf) + alphaf*(Ufs + Df*Us);
+
                 // Compute corrected phase velocity at cell centers
                 //       using updated semi-implicit drag
                 Us = U + alphaf*Ur;
@@ -317,6 +332,7 @@ License
 
                 // Compute total pressure including hydrostatic contribution
                 p = p_rbgh + rhof*gh;
+
                 if (p_rbgh.needReference())
                 {
                     p += dimensionedScalar
@@ -325,17 +341,22 @@ License
                         p.dimensions(),
                         pRefValue - getRefCellValue(p, pRefCell)
                     );
+
                     p_rbgh = p - rhof*gh;
                     p_rbgh.correctBoundaryConditions();
                 }
+
                 // Apply velocity limiters and correct boundary conditions
                 #include "UsUfLimiter.H"
                 Us.correctBoundaryConditions();
+
                 // Update mixture velocity
                 U = alphas*Us + alphaf*Uf;
                 U.correctBoundaryConditions();
+
                 Uw = Uf;
                 Uw.correctBoundaryConditions();
+
                 Ug = Uf;
                 Ug.correctBoundaryConditions();
             }

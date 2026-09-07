@@ -18,7 +18,7 @@ License
     You should have received a copy of the GNU General Public License
     along with SedFOAM.  If not, see <http://www.gnu.org/licenses/>.
 \*---------------------------------------------------------------------------*/
-// if alpha < alphasSmall then set Us = Uw
+// if alpha < alphasSmall then set Us = Uf
 if (ClipUs.value()==1)
 {
     surfaceScalarField alphasf(fvc::interpolate(alphas));
@@ -27,18 +27,28 @@ if (ClipUs.value()==1)
         Usclip[cell] = Us[cell];
         if (alphas[cell]<alphasSmall.value())
         {
+            Us[cell] = Uf[cell];
             Usclip[cell] = Uf[cell];
         }
     }
+
+    Us.correctBoundaryConditions();
+    phis = (fvc::interpolate(Us) & mesh.Sf());
+
     forAll(alphasf, face)
     {
         phisclip[face] = phis[face];
         if (alphasf[face]<alphasSmall.value())
         {
+            phis[face] = phif[face];
             phisclip[face] = phif[face];
         }
     }
-    //phi = alphasf*phis + (1-alphasf)*phif;
+
+    phis.correctBoundaryConditions();
+    phisclip.correctBoundaryConditions();
+
+    phi = alphasf*phis + fvc::interpolate(alphaf)*phif;
 }
 
 if (InitFreeze.value()==1)
@@ -60,7 +70,11 @@ if (InitFreeze.value()==1)
 // initially, we need to fix the bed level, and let the flow develop
 // only cell centers are considered
 // 0-->x, 1-->y, 2-->z
-        if (mesh.cellCentres()[cell][ind] < fixbeddepth.value())
+        if
+        (
+            alphas[cell] > alphasSmall.value()
+         && mesh.cellCentres()[cell][ind] < fixbeddepth.value()
+        )
         {
 // exclude the horizontal conponents
             Us[cell] = Ustemp[cell];
@@ -91,7 +105,11 @@ if (InitFreeze.value()==2)
 // initially, we need to fix the bed level, and let the flow develop
 // only cell centers are considered
 // 0-->x, 1-->y, 2-->z
-       if (mesh.cellCentres()[cell][ind] < fixbeddepth.value())
+       if
+       (
+           alphas[cell] > alphasSmall.value()
+        && mesh.cellCentres()[cell][ind] < fixbeddepth.value()
+       )
        {
 // only exclude the streamwise conponents
            Us[cell] = Ustemp[cell]+Ustemp2[cell];
