@@ -1,11 +1,11 @@
 AUTHORS
  * Antoine Mathieu (University of Delaware, Civil & Environmental Engineering, Center for Applied Coastal Research - Newark, DE - USA)
    amathieu (A) udel.edu
+ * Cyrille Bonamy (LEGI UGA/GINP/CNRS UMR 5519 - Grenoble - France)
+   Cyrille.Bonamy (A) univ-grenoble-alpes.fr
  * Yeulwoo Kim (Pukyong National University, Department of Sustainable Engineering - Busan - Korea)
    yarkim (A) pknu.ac.kr
  * Tian-Jian Hsu (University of Delaware, Civil & Environmental Engineering, Center for Applied Coastal Research - Newark, DE - USA)
    thsu (A) udel.edu
- * Cyrille Bonamy (LEGI UGA/GINP/CNRS UMR 5519 - Grenoble - France)
-   Cyrille.Bonamy (A) univ-grenoble-alpes.fr
  * Julien Chauchat (LEGI UGA/GINP/CNRS UMR 5519 - Grenoble - France)
    Julien.Chauchat (A) univ-grenoble-alpes.fr

@@ -67,7 +67,7 @@ Foam::tmp<Foam::volScalarField> Foam::granularRheologyModels::MuIvPPressure::ps
     const dimensionedScalar& Alphasmall
 ) const
 {
-    return pow(Bphi*alphas / max(alphasMax-alphas, scalar(1e-3)), 2)*nuf*rhof*magD;
+    return pow(Bphi*alphas/max(alphasMax-alphas, 1e-3), 2)*nuf*rhof*magD;
 }
 
 Foam::tmp<Foam::volScalarField> Foam::granularRheologyModels::
