@@ -1,0 +1,33 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+
+patches
+(
+    {
+        name    plane;  // Name of the new patch
+        patchInfo
+        {
+            type    wall;  // Patch type, you can modify this to patch, empty, etc.
+        }
+        constructFrom    patches;
+        patches
+        (
+            oldInternalFaces  // The patch you want to rename (i.e., the default created patch)
+        );
+    }
+);
+
+
+pointSync   true; 

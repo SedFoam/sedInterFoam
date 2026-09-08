@@ -1,0 +1,34 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    {
+        name    cutPlane;
+        type    cellSet;
+        action  new;
+        source  clipPlaneToCell;
+        sourceInfo
+        {
+            point  (0.8 0.196 0.1);  // A point on the plane
+            normal (0.7 1 0); // The normal vector of the plane (tan(35) = 0.7)
+        }
+    }
+);
+
+
+
+// ************************************************************************* //

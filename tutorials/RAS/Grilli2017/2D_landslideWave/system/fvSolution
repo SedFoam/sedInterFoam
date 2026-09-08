@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.4.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p_rgh
+    {
+        solver          GAMG;
+        tolerance       1e-6;
+        relTol          0.0;
+        smoother        DIC;
+        nPreSweeps      0;
+        nPostSweeps     2;
+        nFinestSweeps   2;
+        cacheAgglomeration true;
+        nCellsInCoarsestLevel 100;
+        agglomerator    faceAreaPair;
+        mergeLevels     1;
+    }
+
+    p_rghFinal
+    {
+        $p_rgh;
+        tolerance       1e-9;
+        relTol          0;
+    }
+
+    "(k.fluid|epsilon.fluid|omega.fluid|alpha.*|gamma|Theta|ps_new_value|ps|alphasPlastic)"
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-9;
+        relTol          0.01;
+	nLimiterIter    1000;
+    }
+    "(k.fluidFinal|epsilon.fluidFinal|omega.fluidFinal|alpha.*Final|gammaFinal|ThetaFinal|psFinal|alphasPlasticFinal)"
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-12;
+        relTol          0;
+	nLimiterIter    1000;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor 0;
+    nOuterCorrectors  1;
+    nCorrectors       5;
+    nNonOrthogonalCorrectors 1;
+
+    MULESCorr       1;
+    correctAlpha    1;
+    nAlphasCorr     3;
+    nGammaCorr      2;
+
+    cAlpha          0.5;
+    nAlphaSubCycles 3;
+
+    pRefCell        0;
+    pRefValue       0;
+    faceMomentum    false;
+
+}
+
+// ************************************************************************* //
