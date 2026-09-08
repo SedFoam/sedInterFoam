@@ -56,7 +56,9 @@ gs.update(
 # ============================================================
 # Functions
 # ============================================================
-#Read available sampleSet times from the postProcessing folder.
+# Read available sampleSet times from the postProcessing folder.
+
+
 def get_sample_times(case_folder):
 
     sample_dir = os.path.join(
@@ -90,7 +92,9 @@ def get_sample_times(case_folder):
 
     return time_names
 
-#Read the water elevation at the four wave gauges.
+# Read the water elevation at the four wave gauges.
+
+
 def read_wave_gauges(case_folder):
 
     formatted_listTime = get_sample_times(case_folder)

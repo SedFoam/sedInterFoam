@@ -76,7 +76,7 @@ Foam::tmp<Foam::volScalarField> Foam::Engelund::K
     /(nuf_*beta*beta))
     );
 
-    return max(Cds, scalar(1.0e-6))*nuf_*rhof_/sqr(phases_.d());         
+    return max(Cds, scalar(1.0e-6))*nuf_*rhof_/sqr(phases_.d());
 }
 
 // ************************************************************************* //

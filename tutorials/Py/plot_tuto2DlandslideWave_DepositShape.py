@@ -75,6 +75,7 @@ xinterp, yinterp = np.meshgrid(xi, yi)
 # Functions
 # ============================================================
 
+
 def readOpenFoam(case_folder, times):
     X, Y, Z = fluidfoam.readmesh(case_folder)
 
@@ -116,9 +117,11 @@ def readOpenFoam(case_folder, times):
 
     return alpha, alphaW
 
-#Read experimental landslide profile from Grilli et al. (2017).
+# Read experimental landslide profile from Grilli et al. (2017).
+
+
 def readGrilliShape(filename, decalage):
-    
+
     data = pd.read_csv(filename, header=0)
     data.columns = data.columns.str.strip()
 
@@ -134,12 +137,12 @@ def readGrilliShape(filename, decalage):
 
 alpha, alphaW = readOpenFoam(folder, listTime)
 
-x_grilli_initial, y_grilli_initial = readGrilliShape(initial_shape_file,Decalage)
+x_grilli_initial, y_grilli_initial = readGrilliShape(initial_shape_file, Decalage)
 
 exp_shapes = []
 
 for filename in exp_shape_files:
-    exp_shapes.append(readGrilliShape(filename,Decalage))
+    exp_shapes.append(readGrilliShape(filename, Decalage))
 
 # ============================================================
 # Plot parameters
