@@ -25,15 +25,14 @@ License
 
     #include "updateSurfaceTension.H"
 
-    surfaceScalarField phir("phir", phis - phif);
     // Standard face-flux compression coefficient
-    surfaceScalarField phic(cAlpha*mag(phi/mesh.magSf()));
+    surfaceScalarField phic(cAlpha*mag(phif/mesh.magSf()));
 
     // Add the optional isotropic compression contribution
     if (icAlpha > 0)
     {
         phic *= (1.0 - icAlpha);
-        phic += (cAlpha*icAlpha)*fvc::interpolate(mag(U));
+        phic += (cAlpha*icAlpha)*fvc::interpolate(mag(Uf));
     }
     surfaceScalarField::Boundary& phicBf =
         phic.boundaryFieldRef();
@@ -61,15 +60,9 @@ License
             + fv::gaussConvectionScheme<scalar>
                 (
                     mesh,
-                    phi,
-                    upwind<scalar>(mesh, phi)
-                ).fvmDiv(phi, gamma)
-            + fv::gaussConvectionScheme<scalar>
-                (
-                    mesh,
-                    fvc::flux(-phir, alphas, gammarScheme),
-                    upwind<scalar>(mesh, fvc::flux(-phir, alphas, gammarScheme))
-                ).fvmDiv(fvc::flux(-phir, alphas, gammarScheme), gamma)
+                    phif,
+                    upwind<scalar>(mesh, phif)
+                ).fvmDiv(phif, gamma)
             ==
             //-gamma*fvc::div(Uf)
             fvm::Sp(fvc::div(phif), gamma)
@@ -126,19 +119,13 @@ License
             (
                 fvc::flux
                 (
-                    phi,
+                    phif,
                     gamma,
                     gammaScheme
                 )
             + fvc::flux
                 (
                 -fvc::flux(-phirc, (1.0-gamma), gammarScheme),
-                    gamma,
-                    gammarScheme
-                )
-            + fvc::flux
-                (
-                fvc::flux(-phir, alphas, gammarScheme),
                     gamma,
                     gammarScheme
                 )
@@ -172,7 +159,7 @@ License
 
                 MULES::explicitSolve
                 (
-                    geometricOneField(), gamma, phi, gammaPhi,
+                    geometricOneField(), gamma, phif, gammaPhi,
                     oneField(), zeroField()
                 );
             }
@@ -184,7 +171,7 @@ License
 
             //gamma.min(1.0);
             //gamma.max(0);
-            
+
             /*alphaf = 1.0-alphas;
             alphaw = alphaf*gamma;
             alphag = alphaf*(1.0-gamma);*/

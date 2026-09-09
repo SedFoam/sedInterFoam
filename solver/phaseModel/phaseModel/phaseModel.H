@@ -57,7 +57,13 @@ class phaseModel
 
         //- Characteristic diameter of phase
         dimensionedScalar d_;
-
+        
+        //- 1st coefficient related to permeability for Engelund drag model
+        dimensionedScalar aE_;
+        
+        //- 2nd coefficient related to permeability for Engelund drag model
+        dimensionedScalar bE_;
+        
         //- shape factor for non-sperical particles
         dimensionedScalar sF_;
 
@@ -123,7 +129,15 @@ public:
         {
             return sF_;
         }
-
+        const dimensionedScalar& aE() const
+        {
+            return aE_;
+        }
+        
+        const dimensionedScalar& bE() const
+        {
+            return bE_;
+        }
         const dimensionedScalar& hExp() const
         {
             return hExp_;

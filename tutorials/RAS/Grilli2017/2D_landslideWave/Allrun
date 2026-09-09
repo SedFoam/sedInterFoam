@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Create the mesh
+blockMesh
+snappyHexMesh -overwrite
+extrudeMesh
+
+cp -r 0_org 0
+
+setFields
+mapFields -sourceTime 30 ../1D_sedimentation/
+
+cd 0_org
+cp U.fluid  U.gas  U.solid  U.water ../0/
+cd ..
+decomposePar
+
+# Run sedInterFoam
+mpirun -np 24 sedInterFoam -parallel > log&

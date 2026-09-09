@@ -208,7 +208,7 @@ License
                 phiHbyA.boundaryField()
               - alphasf.boundaryField()
                *(mesh.Sf().boundaryField() & Us.boundaryField())
-              + alphaff.boundaryField()
+              - alphaff.boundaryField()
                *(mesh.Sf().boundaryField() & Uf.boundaryField())
              )
             /(mesh.magSf().boundaryField()*Dp.boundaryField())

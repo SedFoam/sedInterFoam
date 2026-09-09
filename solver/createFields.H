@@ -956,7 +956,7 @@ volScalarField alphasPlastic
          "alphasPlastic",
          runTime.timeName(),
          mesh,
-         IOobject::NO_READ,
+         IOobject::READ_IF_PRESENT,
          IOobject::NO_WRITE
      ),
      mesh,

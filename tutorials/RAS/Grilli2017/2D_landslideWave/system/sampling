@@ -1,0 +1,56 @@
+// -*- C++ -*-
+
+sampleSets
+{
+    type    sets;
+    libs    (sampling);
+
+    writeControl adjustableRunTime;
+    writeInterval 0.001;
+    setFormat           raw;
+    interpolationScheme cellPointFace;
+
+    fields ( alpha.water );
+
+    sets
+    {
+        gauge_1
+        {
+            type    uniform;
+            axis    y;
+            start   (1.4 0.31 0.2);
+            end     (1.4 0.35 0.2);
+            nPoints 1000;
+        }
+        gauge_2
+        {
+            type    uniform;
+            axis    y;
+            start   (2.4 0.31 0.2);
+            end     (2.4 0.35 0.2);
+            nPoints 1000;
+        }
+
+        gauge_3
+        {
+            type    uniform;
+            axis    y;
+            start   (3.4 0.31 0.2);
+            end     (3.4 0.35 0.2);
+            nPoints 1000;
+        }
+
+        gauge_4
+        {
+            type    uniform;
+            axis    y;
+            start   (4.4 0.31 0.2);
+            end     (4.4 0.35 0.2);
+            nPoints 1000;
+        }
+
+    }
+}
+
+
+// ************************************************************************* //
